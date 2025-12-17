@@ -1,0 +1,37 @@
+services:
+  db:
+    image: postgres:16
+    container_name: aviation-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: aviationdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Vader10156$
+    ports:
+      - "1508:5432"
+    volumes:
+      - aviation_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aviationdb"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  api:
+    build: .
+    container_name: aviation-api
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/aviationdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: Vader10156$
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+
+volumes:
+  aviation_pgdata:
