@@ -17,10 +17,32 @@ public class GateController {
         this.gateService = gateService;
     }
 
+    // Request DTO (keeps your API clean: you send airportId instead of embedding an Airport object)
+    public static class GateRequest {
+        private String gateCode;
+        private String terminal;
+        private Boolean active;
+        private Long airportId;
+
+        public GateRequest() {}
+
+        public String getGateCode() { return gateCode; }
+        public void setGateCode(String gateCode) { this.gateCode = gateCode; }
+
+        public String getTerminal() { return terminal; }
+        public void setTerminal(String terminal) { this.terminal = terminal; }
+
+        public Boolean getActive() { return active; }
+        public void setActive(Boolean active) { this.active = active; }
+
+        public Long getAirportId() { return airportId; }
+        public void setAirportId(Long airportId) { this.airportId = airportId; }
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Gate create(@RequestBody Gate gate) {
-        return gateService.create(gate);
+    public Gate create(@RequestBody GateRequest request) {
+        return gateService.create(request);
     }
 
     @GetMapping
@@ -34,8 +56,8 @@ public class GateController {
     }
 
     @PutMapping("/{id}")
-    public Gate update(@PathVariable Long id, @RequestBody Gate gate) {
-        return gateService.update(id, gate);
+    public Gate update(@PathVariable Long id, @RequestBody GateRequest request) {
+        return gateService.update(id, request);
     }
 
     @DeleteMapping("/{id}")

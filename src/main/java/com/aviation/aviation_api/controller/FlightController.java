@@ -48,12 +48,13 @@ public class FlightController {
         return flightService.getAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{id:\\d+}")
     public Flight getById(@PathVariable Long id) {
         return flightService.getById(id);
     }
 
-    @PutMapping("/{id}")
+
+    @PutMapping("/{id:\\d+}")
     public Flight update(@PathVariable Long id, @RequestBody FlightRequest req) {
         Flight f = new Flight();
         f.setFlightNumber(req.flightNumber);
@@ -66,9 +67,19 @@ public class FlightController {
         return flightService.update(id, f, req.airlineId, req.gateId);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id:\\d+}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         flightService.delete(id);
+    }
+
+    @GetMapping("/search/arrivals")
+    public List<Flight> arrivals(@RequestParam String airport) {
+        return flightService.getArrivals(airport);
+    }
+
+    @GetMapping("/search/departures")
+    public List<Flight> departures(@RequestParam String airport) {
+        return flightService.getDepartures(airport);
     }
 }

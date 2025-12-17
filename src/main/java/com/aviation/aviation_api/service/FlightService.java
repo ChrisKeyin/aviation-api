@@ -8,6 +8,7 @@ import com.aviation.aviation_api.repository.FlightRepository;
 import com.aviation.aviation_api.repository.GateRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -24,7 +25,6 @@ public class FlightService {
         this.airlineRepository = airlineRepository;
         this.gateRepository = gateRepository;
     }
-
 
     public Flight create(Flight flight, Long airlineId, Long gateId) {
         Airline airline = airlineRepository.findById(airlineId)
@@ -71,5 +71,25 @@ public class FlightService {
 
     public void delete(Long id) {
         flightRepository.deleteById(id);
+    }
+
+    public List<Flight> getArrivals(String airportCode) {
+        return flightRepository.findByArrivalAirportOrderByScheduledArrivalAsc(airportCode);
+    }
+
+    public List<Flight> getDepartures(String airportCode) {
+        return flightRepository.findByDepartureAirportOrderByScheduledDepartureAsc(airportCode);
+    }
+
+    public List<Flight> getArrivalsBetween(String airportCode, LocalDateTime start, LocalDateTime end) {
+        return flightRepository.findByArrivalAirportAndScheduledArrivalBetweenOrderByScheduledArrivalAsc(
+                airportCode, start, end
+        );
+    }
+
+    public List<Flight> getDeparturesBetween(String airportCode, LocalDateTime start, LocalDateTime end) {
+        return flightRepository.findByDepartureAirportAndScheduledDepartureBetweenOrderByScheduledDepartureAsc(
+                airportCode, start, end
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.aviation.aviation_api.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -19,6 +20,11 @@ public class Gate {
     @Column(nullable = false)
     private Boolean active = true;
 
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "airport_id", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Airport airport;
+
     public Gate() {}
 
     public Gate(String gateCode, String terminal, Boolean active) {
@@ -28,6 +34,7 @@ public class Gate {
     }
 
     public Long getId() { return id; }
+
     public String getGateCode() { return gateCode; }
     public void setGateCode(String gateCode) { this.gateCode = gateCode; }
 
@@ -36,4 +43,7 @@ public class Gate {
 
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
+
+    public Airport getAirport() { return airport; }
+    public void setAirport(Airport airport) { this.airport = airport; }
 }
