@@ -12,6 +12,7 @@ import java.util.List;
 @RequestMapping("/api/airports")
 public class AirportController {
 
+
     private final AirportRepository airportRepository;
 
     public AirportController(AirportRepository airportRepository) {
